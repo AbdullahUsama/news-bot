@@ -272,7 +272,7 @@ articles = scrape_dawn_articles()  # Uses today’s date by default
 
 # ==== GENERATE PROMPT + GEMINI RESPONSES ====
 doc = Document()
-doc.add_heading(f"Gemini Vocabulary Report - {datetime.today().strftime('%Y-%m-%d')}", 0)
+doc.add_heading(f"Vocabulary Report - {datetime.today().strftime('%Y-%m-%d')}", 0)
 
 for article in articles:
     title = article["title"]
@@ -303,19 +303,49 @@ doc.save(doc_buffer)
 doc_buffer.seek(0)
 
 # ==== EMAIL SETUP ====
-msg = MIMEMultipart()
-msg['Subject'] = f"Gemini Vocabulary Report - {datetime.today().strftime('%Y-%m-%d')}"
-msg['From'] = myEmail
-msg['To'] = "demo.abdullah.dev@gmail.com"
+# msg = MIMEMultipart()
+# msg['Subject'] = f"Gemini Vocabulary Report - {datetime.today().strftime('%Y-%m-%d')}"
+# msg['From'] = myEmail
+# msg['To'] = "demo.abdullah.dev@gmail.com"
 
-# Attach a plain text body for email clients that don't render attachments well
+# # Attach a plain text body for email clients that don't render attachments well
+# msg.attach(MIMEText("Please find attached the Gemini vocabulary report in DOCX format.", 'plain'))
+
+# # Attach the docx file
+# part = MIMEBase('application', "vnd.openxmlformats-officedocument.wordprocessingml.document")
+# part.set_payload(doc_buffer.read())
+# encoders.encode_base64(part)
+# part.add_header('Content-Disposition', 'attachment', filename=f"Gemini_Vocab_Report_{datetime.today().strftime('%Y-%m-%d')}.docx")
+# msg.attach(part)
+
+# # ==== SEND EMAIL ====
+# smtp_server = "smtp.gmail.com"
+# smtp_port = 587
+
+# server = smtplib.SMTP(smtp_server, smtp_port)
+# server.starttls()
+# server.login(myEmail, myPassword)
+# server.sendmail(myEmail, msg['To'], msg.as_string())
+# server.quit()
+
+# print("Email with DOCX attachment sent successfully.")
+# ==== EMAIL SETUP ====
+recipient_emails = ["demo.abdullah.dev@gmail.com", "ausama.bese22seecs@seecs.edu.pk", "hareemfatima2244h@gmail.com"]
+
+msg = MIMEMultipart()
+msg['Subject'] = f"Vocabulary Report - {datetime.today().strftime('%Y-%m-%d')}"
+msg['From'] = myEmail
+msg['To'] = ", ".join(recipient_emails)  # For the email header
+
+# Attach plain text body
 msg.attach(MIMEText("Please find attached the Gemini vocabulary report in DOCX format.", 'plain'))
 
-# Attach the docx file
+# Attach the DOCX file
+doc_buffer.seek(0)  # Ensure buffer is at beginning
 part = MIMEBase('application', "vnd.openxmlformats-officedocument.wordprocessingml.document")
 part.set_payload(doc_buffer.read())
 encoders.encode_base64(part)
-part.add_header('Content-Disposition', 'attachment', filename=f"Gemini_Vocab_Report_{datetime.today().strftime('%Y-%m-%d')}.docx")
+part.add_header('Content-Disposition', 'attachment', filename=f"Vocab_Report_{datetime.today().strftime('%Y-%m-%d')}.docx")
 msg.attach(part)
 
 # ==== SEND EMAIL ====
@@ -325,7 +355,7 @@ smtp_port = 587
 server = smtplib.SMTP(smtp_server, smtp_port)
 server.starttls()
 server.login(myEmail, myPassword)
-server.sendmail(myEmail, msg['To'], msg.as_string())
+server.sendmail(myEmail, recipient_emails, msg.as_string())  # Use list here
 server.quit()
 
-print("Email with DOCX attachment sent successfully.")
+print("Email with DOCX attachment sent to multiple recipients successfully.")

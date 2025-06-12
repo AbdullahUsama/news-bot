@@ -330,7 +330,8 @@ doc_buffer.seek(0)
 
 # print("Email with DOCX attachment sent successfully.")
 # ==== EMAIL SETUP ====
-recipient_emails = ["demo.abdullah.dev@gmail.com", "ausama.bese22seecs@seecs.edu.pk", "hareemfatima2244h@gmail.com","2683pbs@pphs.edu.pk","younasadvocate3@gmail.com","Imranahmedlashari21@gmail.com"]
+recipient_emails = ["demo.abdullah.dev@gmail.com", "ausama.bese22seecs@seecs.edu.pk", "hareemfatima2244h@gmail.com","2683pbs@pphs.edu.pk","younasadvocate3@gmail.com","Imranahmedlashari21@gmail.com","huzaifaramzan01@gmail.com"]
+# recipient_emails = ["demo.abdullah.dev@gmail.com"]
 
 msg = MIMEMultipart()
 msg['Subject'] = f"Vocabulary Report - {datetime.today().strftime('%Y-%m-%d')}"
